@@ -1,0 +1,6 @@
+Servers/*
+!Servers/install.py
+!Servers/start.py
+Proxy/*
+!Proxy/start.sh
+!Proxy/velocity.jar
