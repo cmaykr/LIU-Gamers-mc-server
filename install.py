@@ -3,13 +3,10 @@ import requests
 import urllib.request
 import os
 import shutil
-import installmods
 
-file_path = 'Servers/main'
-serverName = 'server'
-def installServer():
+def installServer(serverName, game_version, server_port):
     current_dir = os.getcwd()
-    print("Current directory" +  current_dir)
+    file_path = "Servers/" + serverName
     # Create main server directory and change the working directory
     if not os.path.exists(file_path):
         os.makedirs(file_path)
@@ -23,7 +20,7 @@ def installServer():
             file.write(f.read())
     
     # Install the fabric and minecraft server
-    subprocess.run(['java', '-jar', installerName, serverName, '-downloadMinecraft'])
+    subprocess.run(['java', '-jar', installerName, 'server', '-downloadMinecraft', '-mcversion', game_version])
     
     
     ## The eula.txt and properties file need to be created before the server is launched so the server does not crash when starting the first time.
@@ -33,37 +30,49 @@ def installServer():
     with open('eula.txt', 'w+') as file:
         file.write('eula=True')
        
-    print(os.getcwd())
-    # Cope the default properties file to the server directory 
-    src = '../../default.properties'
-    dst = 'server.properties'
-    shutil.copyfile(src, dst)
+    # Copy the default properties file to the server directory 
+    # src = '../../default.properties'
+    # dst = 'server.properties'
+    # shutil.copyfile(src, dst)
     
-    port = "25564"
-    with open('server.properties', 'r+') as file:
-        data = file.readlines()
+    with open('../../default.properties', 'r+') as serverFile:
+        data = serverFile.readlines()
         print(data)
         
         for idx, line in enumerate(data):
             if (line.split('=')[0] == 'server-port'):
-                line = 'server-port=' + port + '\n'
+                line = 'server-port=' + server_port + '\n'
                 data[idx] = line
                 break
 
-        file.write(''.join(data))
+        # file.write(''.join(data))
+        with open('server.properties', 'w') as propertiesFile:
+            propertiesFile.write(''.join(data))
         print(data)
-    
-    # os.chdir(current_dir)
-    # installmods.installMods()
-    # with open('../../Proxy/forwarding.secret', 'r') as file:
-    #     secret = file.read()
         
-    # with open('config/FabricProxy-Lite.toml') as file:
-    #     data = file.readlines()
-    #     for idx, line in enumerate(data):
-    #         if (line.split('=')[0] == 'secret '):
-    #             line = 'secret = ' + secret
-        
-    #     file.write(''.join(data))
+    # src = '../../configs/FabricProxy-Lite.toml'
     
-# installServer()
+    # dst = 'config/FabricProxy-Lite.toml'
+    # shutil.copyfile(src, dst)
+    
+    print(os.getcwd())
+    if not os.path.exists('config'):
+         os.makedirs('config')
+         
+    fabricProxySecret = ''
+    with open('../../Proxy/forwarding.secret', 'r') as forwardingFile:
+        fabricProxySecret = forwardingFile.read()
+    with open('../../configs/FabricProxy-Lite.toml', 'r') as proxyFile:
+        data = proxyFile.readlines()
+        
+        for idx, line in enumerate(data):
+            if (line.split('=')[0] == 'secret '):
+                
+                line = 'secret = "' + fabricProxySecret + '"\n'
+                data[idx] = line
+                break
+
+        with open('config/FabricProxy-Lite.toml', 'w') as newProxyFile:
+            newProxyFile.write(''.join(data))
+        
+    os.chdir(current_dir)

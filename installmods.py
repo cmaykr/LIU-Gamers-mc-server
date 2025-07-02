@@ -4,17 +4,20 @@ import json
 import os
 
 
-def installMods():
+def installMods(serverName):
     current_dir = os.getcwd()
     os.chdir("/home/david/Documents/Minecraft Server")
-    with open('modList.json', 'r') as file:
+    print(os.getcwd())
+    with open('serverList.json', 'r') as file:
         data = json.load(file)
-        game_version = data["main"]["game_version"]
-        serverDirectory = data["main"]["directory"]
-        for mod in data["main"]["mods"]:
+        print(data[serverName])
+        print(data[serverName]['game_version'])
+        game_version = data[serverName]['game_version']
+        for mod in data[serverName]["mods"]:
             print(mod)
-            installMod(mod, game_version, serverDirectory)
+            installMod(mod, game_version, serverName)
             
+    print(current_dir)
     os.chdir(current_dir)
         
 def installMod(modName, game_version, serverDirectory):
@@ -33,4 +36,9 @@ def installMod(modName, game_version, serverDirectory):
         with open("Servers/" + serverDirectory + "/mods/" + filename, 'wb') as file:
             file.write(f.read())
     
-installMods()
+
+with open('serverList.json', 'r') as file:
+    data = json.load(file)
+    for serverName in data:
+        print(serverName)
+        installMods(serverName)
