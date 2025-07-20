@@ -1,3 +1,9 @@
+This project is meant to allow for easy and fast installation of multiple modded Minecraft servers under a proxy. 
+
+# ServerList
+This json file is a list of all servers that should be created and with all mods for each server, the server is created automatically and the mods are installed automatically using the Modrinth API.
+Currently all servers use fabric and only the game version and mods used can be changed.
+
 # Configuration files
 The configs for the mods should be put under the configs folder, when the server is started these configs will be copied over to each servers config folder. This way you can set your own default configuration for every mod.
 
