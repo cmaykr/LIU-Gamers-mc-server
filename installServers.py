@@ -6,20 +6,15 @@ import install
 import installmods
 import json
 import shutil
-
-def startServer():
-    os.chdir("Servers/main")         
-    subprocess.run(['java', '-jar', 'fabric-server-launch' + '.jar', 'nogui'])
     
 with open('serverList.json', 'r') as file:
     data = json.load(file)
-    for serverName in data:
-        print(serverName)
+    for i, serverName in enumerate(data):
         installmods.installMods(serverName)
         game_version = data[serverName]["game_version"]
-        install.installServer(serverName, game_version, "25564")
-
-startServer()
-
+        install.installServer(serverName, game_version, str(25556 + i))
+        
+        src = 'worlds/' + serverName
     
-
+        dst = 'Servers/' + serverName + '/world'
+        shutil.copytree(src, dst, dirs_exist_ok=True)

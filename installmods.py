@@ -37,8 +37,8 @@ def installMod(modName, game_version, serverDirectory):
             file.write(f.read())
     
 
-with open('serverList.json', 'r') as file:
-    data = json.load(file)
-    for serverName in data:
-        print(serverName)
-        installMods(serverName)
+# with open('serverList.json', 'r') as file:
+#     data = json.load(file)
+#     for serverName in data:
+#         print(serverName)
+#         installMods(serverName)

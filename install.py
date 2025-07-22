@@ -29,11 +29,6 @@ def installServer(serverName, game_version, server_port):
     # Creates eula file so server can start
     with open('eula.txt', 'w+') as file:
         file.write('eula=True')
-       
-    # Copy the default properties file to the server directory 
-    # src = '../../default.properties'
-    # dst = 'server.properties'
-    # shutil.copyfile(src, dst)
     
     with open('../../default.properties', 'r+') as serverFile:
         data = serverFile.readlines()
@@ -49,11 +44,6 @@ def installServer(serverName, game_version, server_port):
         with open('server.properties', 'w') as propertiesFile:
             propertiesFile.write(''.join(data))
         print(data)
-        
-    # src = '../../configs/FabricProxy-Lite.toml'
-    
-    # dst = 'config/FabricProxy-Lite.toml'
-    # shutil.copyfile(src, dst)
     
     print(os.getcwd())
     if not os.path.exists('config'):
