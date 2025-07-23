@@ -21,13 +21,19 @@ def installMods(serverName):
     os.chdir(current_dir)
         
 def installMod(modName, game_version, serverDirectory):
-    # print("https://api.modrinth.com/v2/project/" + modName + "/version?game_versions=[%22" + game_version + "%22]")
-    res = requests.get("https://api.modrinth.com/v2/project/" + modName + "/version?game_versions=[%22" + game_version + "%22]")
+    res = requests.get("https://api.modrinth.com/v2/project/" + modName + "/version?game_versions=[%22" + game_version + "%22]") 
+    data = res.json()
     
-    print(res.json()[0]["files"][0]["url"])
+    versionIndex = -1
+    for idx, version in enumerate(data):
+        for loader in version["loaders"]:
+            if loader == "fabric":
+                versionIndex = idx
     
-    URI = res.json()[0]["files"][0]["url"]
-    filename = res.json()[0]["files"][0]["filename"]
+    if versionIndex == -1:
+        raise ValueError("Mod" + modName + " for game version " + game_version + " and fabric type not found. Check for mistype or if mod exists for this version.")
+    URI = res.json()[versionIndex]["files"][0]["url"]
+    filename = res.json()[versionIndex]["files"][0]["filename"]
     
     
     if not os.path.exists("Servers/" + serverDirectory + "/mods"):
@@ -37,8 +43,8 @@ def installMod(modName, game_version, serverDirectory):
             file.write(f.read())
     
 
-# with open('serverList.json', 'r') as file:
-#     data = json.load(file)
-#     for serverName in data:
-#         print(serverName)
-#         installMods(serverName)
+with open('serverList.json', 'r') as file:
+    data = json.load(file)
+    for serverName in data:
+        print(serverName)
+        installMods(serverName)
