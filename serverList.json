@@ -6,31 +6,22 @@
             "fabric-api",
             "fabricproxy-lite",
             "achievements-optimizer",
-            "adaptiveview",
             "amplified-nether",
             "anti-xray",
             "autowhitelist",
-            "chunk-debug",
             "chunky",
-            "chunkyborder",
-            "cloth-config",
             "collective",
-            "faster-random",
             "ferrite-core",
-            "just-player-heads",
             "krypton",
-            "ksyxis",
             "ledger",
             "lithium",
             "modernfix",
             "noisium",
             "floodgate",
-            "luckperms",
             "mods-command",
-            "servercore",
-            "fabric-language-kotlin"
+            "fabric-language-kotlin",
+            "geyser"
         ]
-        
     },
     "CTF":
     {
