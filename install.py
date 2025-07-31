@@ -1,4 +1,4 @@
-import subprocess
+from subprocess import Popen, PIPE, STDOUT, run
 import requests
 import urllib.request
 import os
@@ -20,7 +20,7 @@ def installServer(serverName, game_version, server_port):
             file.write(f.read())
     
     # Install the fabric and minecraft server
-    subprocess.run(['java', '-jar', installerName, 'server', '-downloadMinecraft', '-mcversion', game_version])
+    run(['java', '-jar', installerName, 'server', '-downloadMinecraft', '-mcversion', game_version])
     
     
     ## The eula.txt and properties file need to be created before the server is launched so the server does not crash when starting the first time.
@@ -66,3 +66,11 @@ def installServer(serverName, game_version, server_port):
             newProxyFile.write(''.join(data))
         
     os.chdir(current_dir)
+    
+def installProxy():
+    currentDir = os.getcwd()
+    os.chdir(currentDir + '/Proxy')
+    p = Popen(['java', '-Xms1G', '-Xmx1G', '-XX:+UseG1GC', '-XX:G1HeapRegionSize=4M', '-XX:+UnlockExperimentalVMOptions', '-XX:+ParallelRefProcEnabled', '-XX:+AlwaysPreTouch', '-XX:MaxInlineLevel=15', '-jar', 'velocity.jar'], stdin=PIPE, stdout=PIPE, text=True)
+    stdout_data = p.communicate(input='end \n')
+    print(stdout_data)
+    os.chdir(currentDir)
