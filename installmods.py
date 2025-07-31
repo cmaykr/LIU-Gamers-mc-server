@@ -41,10 +41,3 @@ def installMod(modName, game_version, serverDirectory):
     with urllib.request.urlopen(URI) as f:
         with open("Servers/" + serverDirectory + "/mods/" + filename, 'wb') as file:
             file.write(f.read())
-    
-
-with open('serverList.json', 'r') as file:
-    data = json.load(file)
-    for serverName in data:
-        print(serverName)
-        installMods(serverName)
