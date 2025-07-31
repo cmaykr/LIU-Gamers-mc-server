@@ -70,7 +70,6 @@ def installServer(serverName, game_version, server_port):
 def installProxy():
     currentDir = os.getcwd()
     os.chdir(currentDir + '/Proxy')
-    p = Popen(['java', '-Xms1G', '-Xmx1G', '-XX:+UseG1GC', '-XX:G1HeapRegionSize=4M', '-XX:+UnlockExperimentalVMOptions', '-XX:+ParallelRefProcEnabled', '-XX:+AlwaysPreTouch', '-XX:MaxInlineLevel=15', '-jar', 'velocity.jar'], stdin=PIPE, stdout=PIPE, text=True)
-    stdout_data = p.communicate(input='end \n')
-    print(stdout_data)
+    run(['java', '-Xms1G', '-Xmx1G', '-XX:+UseG1GC', '-XX:G1HeapRegionSize=4M', '-XX:+UnlockExperimentalVMOptions', '-XX:+ParallelRefProcEnabled', '-XX:+AlwaysPreTouch', '-XX:MaxInlineLevel=15', '-jar', 'velocity.jar'], input='end \n'.encode())
+                
     os.chdir(currentDir)
