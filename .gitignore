@@ -1,6 +1,4 @@
 Servers/*
 Proxy/*
-!Proxy/start.sh
-!Proxy/velocity.jar
 __pycache__
 worlds/*

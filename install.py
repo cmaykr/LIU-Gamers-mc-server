@@ -1,8 +1,10 @@
 from subprocess import Popen, PIPE, STDOUT, run
 import requests
 import urllib.request
+from urllib.request import urlretrieve
 import os
-import shutil
+from shutil import copymode, move
+from tempfile import mkstemp
 
 def installServer(serverName, game_version, server_port):
     current_dir = os.getcwd()
@@ -45,6 +47,8 @@ def installServer(serverName, game_version, server_port):
             propertiesFile.write(''.join(data))
         print(data)
     
+    addPropertyValue(os.path.join(current_dir, 'Proxy/velocity.toml'), '[servers]', serverName + ' = "localhost:' + server_port + '"')
+    
     print(os.getcwd())
     if not os.path.exists('config'):
          os.makedirs('config')
@@ -69,7 +73,85 @@ def installServer(serverName, game_version, server_port):
     
 def installProxy():
     currentDir = os.getcwd()
+    if not os.path.exists('Proxy'):
+        os.mkdir('Proxy')
     os.chdir(currentDir + '/Proxy')
+            
+    payload = requests.get('https://fill-data.papermc.io/v1/objects/f82780ce33035ebe3d6ea7981f0e6e8a3e41a64f2080ef5c0f1266fada03cbee/velocity-3.4.0-SNAPSHOT-522.jar')
+    with open('velocity.jar', 'wb') as file:
+        file.write(payload.content)
+    
     run(['java', '-Xms1G', '-Xmx1G', '-XX:+UseG1GC', '-XX:G1HeapRegionSize=4M', '-XX:+UnlockExperimentalVMOptions', '-XX:+ParallelRefProcEnabled', '-XX:+AlwaysPreTouch', '-XX:MaxInlineLevel=15', '-jar', 'velocity.jar'], input='end \n'.encode())
+           
+    modifyConfigLine('velocity.toml', 'player-info-forwarding-mode', '"MODERN"')
+    
+    with open('velocity.toml', 'r+') as configFile:
+        newText = str()
+        inServerProperty = False
+        for line in configFile:
+            if '[servers]' in line:
+                inServerProperty = True
+                newText += line
+                print("Found it")
+                continue
+            if line[0] == '#':
+                newText += line
+                continue
+            if line.startswith('[') and inServerProperty:
+                newText += '\n'
                 
+                tryStr = 'try = [\n    "main"\n    ]\n\n'
+                newText += tryStr
+                inServerProperty = False
+            
+            if not inServerProperty:
+                newText += line
+                
+        with open('velocity.toml', 'w') as newFile:
+            newFile.write(newText)
+            
+    with open('velocity.toml', 'r+') as configFile:
+        newText = str()
+        inForced = False
+        for line in configFile:
+            if line[0] == '[' and inForced:
+                newText += '\n'
+                inForced = False
+            if '[forced-hosts]' in line:
+                print("found it!")
+                inForced = True
+                newText += line
+            
+            if not inForced or line[0] == '#':
+                newText += line
+                
+        with open('velocity.toml', 'w') as newFile:
+            newFile.write(newText)
+            
     os.chdir(currentDir)
+    
+def modifyConfigLine(filename, property, newValue):
+    with open(filename, 'r') as file:
+        newText = str()
+        for line in file:
+            if property in line and line[0] != '#':
+                line = property + ' = ' + newValue + '\n'
+            newText += line
+        with open(str(filename), 'w+') as newFile:
+            newFile.write(newText)
+            
+def addPropertyValue(filename, property, newPropertyValue):
+    print(os.getcwd())
+    with open(filename, 'r') as configFile:
+        newText = str()
+        foundProperty = False
+        for line in configFile:
+            if property in line and line[0] != '#':
+                foundProperty = True
+            if foundProperty == True and line == '\n':
+                line = newPropertyValue + '\n\n'
+                foundProperty = False
+            newText += line
+        with open(filename, 'w') as newFile:
+            newFile.write(newText)
+            
