@@ -5,9 +5,6 @@ import os
 
 
 def installMods(serverName):
-    current_dir = os.getcwd()
-    os.chdir("/home/david/Documents/Minecraft Server")
-    print(os.getcwd())
     with open('serverList.json', 'r') as file:
         data = json.load(file)
         print(data[serverName])
@@ -16,9 +13,6 @@ def installMods(serverName):
         for mod in data[serverName]["mods"]:
             print(mod)
             installMod(mod, game_version, serverName)
-            
-    print(current_dir)
-    os.chdir(current_dir)
         
 def installMod(modName, game_version, serverDirectory):
     res = requests.get("https://api.modrinth.com/v2/project/" + modName + "/version?game_versions=[%22" + game_version + "%22]") 

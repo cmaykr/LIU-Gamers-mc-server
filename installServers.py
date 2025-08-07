@@ -2,13 +2,16 @@ import subprocess
 import requests
 import urllib.request
 import os
-import install
+from install import installProxy, installServer
 import installmods
 import json
 import shutil
 import sys
     
   
+  
+installProxy()
+
 arg = DEFAULT = object()  
 print(sys.argv)
 if len(sys.argv) == 1:
@@ -17,12 +20,13 @@ if len(sys.argv) == 1:
         for i, serverName in enumerate(data):
             installmods.installMods(serverName)
             game_version = data[serverName]["game_version"]
-            install.installServer(serverName, game_version, str(25556 + i))
+            installServer(serverName, game_version, str(25556 + i))
             
-            src = 'worlds/' + serverName
-        
-            dst = 'Servers/' + serverName + '/world'
-            shutil.copytree(src, dst, dirs_exist_ok=True)
+            if os.path.exists('/worlds/' + serverName):
+                src = 'worlds/' + serverName
+            
+                dst = 'Servers/' + serverName + '/world'
+                shutil.copytree(src, dst, dirs_exist_ok=True)
 else:
     servers = sys.argv
     with open('serverList.json', 'r') as file:
@@ -31,9 +35,10 @@ else:
             if serverName in servers:
                 installmods.installMods(serverName)
                 game_version = data[serverName]["game_version"]
-                install.installServer(serverName, game_version, str(25556 + i))
+                installServer(serverName, game_version, str(25556 + i))
                 
-                src = 'worlds/' + serverName
-            
-                dst = 'Servers/' + serverName + '/world'
-                shutil.copytree(src, dst, dirs_exist_ok=True)
+                if os.path.exists('/worlds/' + serverName):
+                    src = 'worlds/' + serverName
+                
+                    dst = 'Servers/' + serverName + '/world'
+                    shutil.copytree(src, dst, dirs_exist_ok=True)
