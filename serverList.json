@@ -28,7 +28,8 @@
         "game_version": "1.21",
         "mods": [
             "fabric-api",
-            "fabricproxy-lite"
+            "fabricproxy-lite",
+            "luckperms"
         ]
     }
     

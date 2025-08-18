@@ -22,7 +22,7 @@ if len(sys.argv) == 1:
             game_version = data[serverName]["game_version"]
             installServer(serverName, game_version, str(25556 + i))
             
-            if os.path.exists('/worlds/' + serverName):
+            if os.path.exists('worlds/' + serverName):
                 src = 'worlds/' + serverName
             
                 dst = 'Servers/' + serverName + '/world'
@@ -37,7 +37,7 @@ else:
                 game_version = data[serverName]["game_version"]
                 installServer(serverName, game_version, str(25556 + i))
                 
-                if os.path.exists('/worlds/' + serverName):
+                if os.path.exists('worlds/' + serverName):
                     src = 'worlds/' + serverName
                 
                     dst = 'Servers/' + serverName + '/world'
