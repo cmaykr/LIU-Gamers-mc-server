@@ -22,6 +22,7 @@ startProxy()
 os.chdir(rootPath)
 with open('serverList.json', 'r') as serverListFile:
     data = json.load(serverListFile)
+    data = data["servers"]
     for serverName in data:
         startServer('Servers/' + serverName, serverName)
         

@@ -1,36 +1,44 @@
 {
-    "main":
+    "proxy":
     {
-        "game_version": "1.21",
-        "mods": [
-            "fabric-api",
-            "fabricproxy-lite",
-            "achievements-optimizer",
-            "amplified-nether",
-            "anti-xray",
-            "autowhitelist",
-            "chunky",
-            "collective",
-            "ferrite-core",
-            "krypton",
-            "ledger",
-            "lithium",
-            "modernfix",
-            "noisium",
-            "floodgate",
-            "mods-command",
-            "fabric-language-kotlin",
-            "geyser"
-        ]
-    },
-    "CTF":
-    {
-        "game_version": "1.21",
-        "mods": [
-            "fabric-api",
-            "fabricproxy-lite",
+        "plugins":
+        [
             "luckperms"
         ]
+    },
+    "servers":
+    {
+        "main":
+        {
+            "game_version": "1.21",
+            "mods": [
+                "fabric-api",
+                "fabricproxy-lite",
+                "achievements-optimizer",
+                "amplified-nether",
+                "anti-xray",
+                "autowhitelist",
+                "chunky",
+                "collective",
+                "ferrite-core",
+                "krypton",
+                "ledger",
+                "lithium",
+                "modernfix",
+                "noisium",
+                "floodgate",
+                "mods-command",
+                "fabric-language-kotlin",
+                "geyser"
+            ]
+        },
+        "CTF":
+        {
+            "game_version": "1.21",
+            "mods": [
+                "fabric-api",
+                "fabricproxy-lite"
+            ]
+        }
     }
-    
 }

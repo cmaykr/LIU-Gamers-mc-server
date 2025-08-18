@@ -7,14 +7,14 @@ import os
 def installMods(serverName):
     with open('serverList.json', 'r') as file:
         data = json.load(file)
-        print(data[serverName])
-        print(data[serverName]['game_version'])
-        game_version = data[serverName]['game_version']
-        for mod in data[serverName]["mods"]:
-            print(mod)
-            installMod(mod, game_version, serverName)
         
-def installMod(modName, game_version, serverDirectory):
+        print([serverName])
+        game_version = data["servers"][serverName]['game_version']
+        for mod in data["servers"][serverName]["mods"]:
+            print(mod)
+            installMod(mod, game_version, "Servers/" + serverName + "/mods")
+        
+def installMod(modName, game_version, directory):
     res = requests.get("https://api.modrinth.com/v2/project/" + modName + "/version?game_versions=[%22" + game_version + "%22]") 
     data = res.json()
     
@@ -30,8 +30,8 @@ def installMod(modName, game_version, serverDirectory):
     filename = res.json()[versionIndex]["files"][0]["filename"]
     
     
-    if not os.path.exists("Servers/" + serverDirectory + "/mods"):
-        os.makedirs("Servers/" + serverDirectory + "/mods")
+    if not os.path.exists(directory):
+        os.makedirs(directory)
     with urllib.request.urlopen(URI) as f:
-        with open("Servers/" + serverDirectory + "/mods/" + filename, 'wb') as file:
+        with open(os.path.join(directory, filename), 'wb') as file:
             file.write(f.read())
