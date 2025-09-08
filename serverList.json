@@ -20,7 +20,8 @@
             "floodgate",
             "mods-command",
             "fabric-language-kotlin",
-            "geyser"
+            "geyser",
+            "sodium"
         ]
     },
     "CTF":
