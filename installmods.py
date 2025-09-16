@@ -2,7 +2,8 @@ import requests
 import urllib
 import json
 import os
-
+import datetime
+from packaging.version import Version
 
 def installMods(serverName):
     with open('serverList.json', 'r') as file:
@@ -19,13 +20,18 @@ def installMod(modName, game_version, serverDirectory):
     data = res.json()
     
     versionIndex = -1
+    lastVersionDate = datetime.datetime(1, 1, 1)
     for idx, version in enumerate(data):
         for loader in version["loaders"]:
             if loader == "fabric":
-                versionIndex = idx
+                date_published = str(version["date_published"]).split('T')[0]
+                date = datetime.datetime.strptime(date_published, '%Y-%m-%d')
+                if date > lastVersionDate:
+                    versionIndex = idx
+                    lastVersionDate = date
     
     if versionIndex == -1:
-        raise ValueError("Mod" + modName + " for game version " + game_version + " and fabric type not found. Check for mistype or if mod exists for this version.")
+        raise ValueError("Mod " + modName + " for game version " + game_version + " and fabric type not found. Check for mistype or if mod exists for this version.")
     URI = res.json()[versionIndex]["files"][0]["url"]
     filename = res.json()[versionIndex]["files"][0]["filename"]
     
